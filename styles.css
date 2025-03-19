@@ -1,0 +1,53 @@
+body {
+    background-color: #2d2d2d;
+    color: white;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+
+#app {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+input, select, button {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #444444;
+    color: white;
+}
+
+button {
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #666666;
+}
+
+#preview {
+    width: 320px; /* Largura fixa */
+    height: 180px; /* Altura fixa */
+    background-color: #444444;
+    margin-bottom: 20px;
+    overflow: hidden; /* Impede que o vídeo ultrapasse o tamanho da div */
+}
+
+#preview video {
+    width: 100%; /* Faz o vídeo ocupar 100% da largura da div */
+    height: 100%; /* Faz o vídeo ocupar 100% da altura da div */
+    object-fit: cover; /* Mantém a proporção do vídeo */
+}
+
+#progress-bar {
+    width: 100%;
+    margin-top: 20px;
+}
+
+#status {
+    margin-top: 10px;
+    color: green;
+}

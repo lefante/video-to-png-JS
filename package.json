@@ -1,0 +1,16 @@
+{
+  "name": "video-to-png-converter",
+  "version": "1.0.0",
+  "description": "A video to PNG converter using Electron and FFmpeg",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "lefante",
+  "license": "MIT",
+  "dependencies": {
+    "@ffmpeg/core": "^0.11.0",
+    "@ffmpeg/ffmpeg": "^0.11.6",
+    "electron": "^25.0.0"
+  }
+}
