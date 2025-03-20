@@ -1,17 +1,21 @@
 let selectedFilePath = null;
 let selectedOutputDir = null;
 
+// Função para validar entrada numérica
 function validateNumberInput(event) {
     const key = event.key;
+    // Permite apenas números, Backspace e Delete
     if (!/[0-9]|Backspace|Delete|ArrowLeft|ArrowRight|Tab/.test(key)) {
         event.preventDefault();
     }
 }
 
+// Aplicar validação aos campos numéricos
 document.getElementById('width').addEventListener('keydown', validateNumberInput);
 document.getElementById('height').addEventListener('keydown', validateNumberInput);
 document.getElementById('fps').addEventListener('keydown', validateNumberInput);
 
+// Selecionar vídeo
 document.getElementById('select-file').addEventListener('click', async () => {
     try {
         selectedFilePath = await window.electronAPI.selectFile();
@@ -27,6 +31,7 @@ document.getElementById('select-file').addEventListener('click', async () => {
     }
 });
 
+// Selecionar diretório de saída
 document.getElementById('select-directory').addEventListener('click', async () => {
     try {
         selectedOutputDir = await window.electronAPI.selectDirectory();
@@ -38,11 +43,13 @@ document.getElementById('select-directory').addEventListener('click', async () =
     }
 });
 
+// Atualizar a barra de progresso
 window.electronAPI.onConversionProgress((event, percent) => {
     const progressBar = document.getElementById('progress-bar');
     progressBar.value = percent;
 });
 
+// Converter vídeo
 document.getElementById('convert').addEventListener('click', async () => {
     const width = document.getElementById('width').value;
     const height = document.getElementById('height').value;

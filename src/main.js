@@ -17,7 +17,7 @@ function createWindow() {
         },
     });
 
-    mainWindow.loadFile('index.html');
+    mainWindow.loadFile(path.join(__dirname, 'index.html'));
     mainWindow.on('closed', () => mainWindow = null);
 }
 
@@ -31,7 +31,6 @@ app.on('activate', () => {
     if (mainWindow === null) createWindow();
 });
 
-// IPC Handlers
 ipcMain.handle('select-file', async () => {
     const result = await dialog.showOpenDialog({
         properties: ['openFile'],
