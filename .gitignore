@@ -1,9 +1,7 @@
 node_modules/
 .env
-
-# Ignorar arquivos de log
 *.log
 dist/
 out/
-package-lock.json/
+package-lock.json
 .DS_Store
