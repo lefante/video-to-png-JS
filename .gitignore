@@ -1,10 +1,6 @@
 node_modules/
-
 .env
-
 *.log
-
 dist/
 out/
-
 package-lock.json/
