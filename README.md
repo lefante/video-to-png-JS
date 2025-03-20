@@ -1,6 +1,6 @@
 # Video to PNG Converter
 
-![Screenshot](https://media.discordapp.net/attachments/1240055891697340587/1352356979258953802/bmsEooX.png?ex=67ddb815&is=67dc6695&hm=8d98f01dae946c6d2b0831b974ce7a2467035828da6178eeb0f316f1599898ab&=&format=webp&quality=lossless) <!-- Adicione uma captura de tela do seu aplicativo -->
+![Screenshot](https://media.discordapp.net/attachments/1240055891697340587/1352380339301126195/2FN56gw.png?ex=67ddcdd6&is=67dc7c56&hm=d4af28a68c3742ae0eec0566f0117ad6abb93c33b48b5f68677defc21cef09c6&=&format=webp&quality=lossless&width=1099&height=552) <!-- Adicione uma captura de tela do seu aplicativo -->
 
 Um aplicativo simples para converter vídeos em uma sequência de imagens PNG. Desenvolvido com Electron
 
@@ -26,3 +26,11 @@ Um aplicativo simples para converter vídeos em uma sequência de imagens PNG. D
   - **Maintain Aspect Ratio with Borders:** Mantém a proporção e adiciona bordas.
   - **Resize with Fixed Aspect Ratio:** Redimensiona mantendo a proporção original.
 - **Controle de FPS:** Defina a taxa de quadros por segundo (FPS) para a extração.
+
+---
+
+## 📦 Tecnologias Utilizadas
+
+- [Electron](https://www.electronjs.org/) - Para criar aplicativos desktop com JavaScript.
+- [FFmpeg.wasm](https://ffmpegwasm.netlify.app/) - Para manipulação de vídeo no navegador.
+- [Node.js](https://nodejs.org/) - Ambiente de execução do JavaScript.
