@@ -5,4 +5,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
     selectDirectory: () => ipcRenderer.invoke('select-directory'),
     convertVideo: (options) => ipcRenderer.invoke('convert-video', options),
     onConversionProgress: (callback) => ipcRenderer.on('conversion-progress', callback),
+    onFrameSaved: (callback) => ipcRenderer.on('frame-saved', callback),
+    minimize: () => ipcRenderer.send('window-minimize'),
+    close: () => ipcRenderer.send('window-close'),
+    toggleFullscreen: () => ipcRenderer.send('window-toggle-fullscreen'),
 });
