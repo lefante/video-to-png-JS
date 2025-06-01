@@ -1,6 +1,6 @@
 # Video to PNG Converter
 
-<img align="right" padding="40px" src="./assets/screenshot.png">
+<a href="https://github.com/lefante/video-to-png-JS/releases"><img align="right" padding="40px" src="./assets/screenshot.png"></a>
 
 A simple app to convert videos into a sequence of PNG images. Built with Electron.
 
