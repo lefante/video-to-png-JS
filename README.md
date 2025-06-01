@@ -1,6 +1,6 @@
 # Video to PNG Converter
 
-![Screenshot](https://media.discordapp.net/attachments/1240055891697340587/1352380339301126195/2FN56gw.png?ex=67ddcdd6&is=67dc7c56&hm=d4af28a68c3742ae0eec0566f0117ad6abb93c33b48b5f68677defc21cef09c6&=&format=webp&quality=lossless&width=1099&height=552) <!-- Add a screenshot of your app -->
+<img src="./assets/screenshot.png">
 
 A simple app to convert videos into a sequence of PNG images. Built with Electron.
 
