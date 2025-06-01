@@ -1,6 +1,6 @@
 # Video to PNG Converter
 
-<img src="./assets/screenshot.png">
+<img align="right" src="./assets/screenshot.png">
 
 A simple app to convert videos into a sequence of PNG images. Built with Electron.
 
