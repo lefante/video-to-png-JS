@@ -43,7 +43,7 @@ app.on('browser-window-created', (_, win) => {
 ipcMain.handle('select-file', async () => {
     const result = await dialog.showOpenDialog({
         properties: ['openFile'],
-        filters: [{ name: 'Videos', extensions: ['mp4', 'avi', 'mkv'] }],
+    filters: [{ name: 'Videos', extensions: ['mp4', 'avi', 'mkv', 'gif'] }],
     });
     return result.filePaths[0];
 });
@@ -60,8 +60,10 @@ ipcMain.handle('convert-video', async (event, { filePath, outputDir, width, heig
         const ffmpeg = createFFmpeg({ log: true });
         await ffmpeg.load();
 
-        const inputFile = await fetchFile(filePath);
-        ffmpeg.FS('writeFile', 'input.mp4', inputFile);
+    const inputFile = await fetchFile(filePath);
+    const ext = path.extname(filePath) || '.mp4';
+    const inputFileName = `input${ext}`;
+    ffmpeg.FS('writeFile', inputFileName, inputFile);
 
         const outputPath = 'output';
         ffmpeg.FS('mkdir', outputPath);
@@ -76,7 +78,7 @@ ipcMain.handle('convert-video', async (event, { filePath, outputDir, width, heig
         let totalFrames = 0;
         try {
             await ffmpeg.run(
-                '-i', 'input.mp4',
+                '-i', inputFileName,
                 '-vf', `fps=${fps}`,
                 '-map', '0:v:0',
                 '-c', 'copy',
@@ -85,7 +87,7 @@ ipcMain.handle('convert-video', async (event, { filePath, outputDir, width, heig
         } catch {}
 
         const args = [
-            '-i', 'input.mp4',
+            '-i', inputFileName,
             '-vf', `fps=${fps},${resizeFilter}`,
             '-start_number', '0',
             `${outputPath}/${name}-%d.png`
