@@ -73,7 +73,6 @@ ipcMain.handle('convert-video', async (event, { filePath, outputDir, width, heig
             resizeFilter = `scale=${width}:-1`;
         }
 
-        // Estimate total frames for progress bar
         let totalFrames = 0;
         try {
             await ffmpeg.run(
@@ -88,7 +87,8 @@ ipcMain.handle('convert-video', async (event, { filePath, outputDir, width, heig
         const args = [
             '-i', 'input.mp4',
             '-vf', `fps=${fps},${resizeFilter}`,
-            `${outputPath}/${name}-%04d.png`
+            '-start_number', '0',
+            `${outputPath}/${name}-%d.png`
         ];
 
         let lastCount = 0;
@@ -103,7 +103,15 @@ ipcMain.handle('convert-video', async (event, { filePath, outputDir, width, heig
         ffmpeg.setProgress(() => {
             try {
                 const files = ffmpeg.FS('readdir', outputPath);
-                const newFiles = files.filter(f => f.startsWith(name) && f.endsWith('.png'));
+                const newFiles = files
+                    .filter(f => f.startsWith(name) && f.endsWith('.png'))
+                    .sort((a, b) => {
+                        const aMatch = a.match(/(\d+)\.png$/);
+                        const bMatch = b.match(/(\d+)\.png$/);
+                        const na = aMatch ? parseInt(aMatch[1], 10) : 0;
+                        const nb = bMatch ? parseInt(bMatch[1], 10) : 0;
+                        return na - nb;
+                    });
                 if (newFiles.length > lastCount) {
                     for (let i = lastCount; i < newFiles.length; i++) {
                         const file = newFiles[i];
