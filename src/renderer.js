@@ -22,10 +22,30 @@ document.getElementById('select-file').addEventListener('click', async () => {
             document.getElementById('preview').innerHTML = '';
             document.getElementById('preview').appendChild(video);
 
-            document.getElementById('status').textContent = `Selected file: ${selectedFilePath.split(/[\\/]/).pop()}`;
+            // Obter duração do vídeo para previsão de frames
+            video.onloadedmetadata = function() {
+                const fps = parseFloat(document.getElementById('fps').value) || 0;
+                if (fps > 0) {
+                    const duration = video.duration;
+                    const estimatedFrames = Math.floor(duration * fps);
+                    document.getElementById('status').textContent = `Arquivo selecionado: ${selectedFilePath.split(/[\\/]/).pop()} | Duração: ${duration.toFixed(2)}s | Previsão: ${estimatedFrames} PNGs (com FPS atual)`;
+                } else {
+                    document.getElementById('status').textContent = `Arquivo selecionado: ${selectedFilePath.split(/[\\/]/).pop()} | Duração: ${video.duration.toFixed(2)}s`;
+                }
+            };
         }
     } catch (error) {
         console.error('Error selecting file:', error);
+    }
+});
+
+// Atualizar previsão ao mudar FPS
+document.getElementById('fps').addEventListener('input', () => {
+    const fps = parseFloat(document.getElementById('fps').value) || 0;
+    const video = document.querySelector('#preview video');
+    if (video && video.duration && fps > 0) {
+        const estimatedFrames = Math.floor(video.duration * fps);
+        document.getElementById('status').textContent = `Arquivo selecionado: ${selectedFilePath ? selectedFilePath.split(/[\\/]/).pop() : ''} | Duração: ${video.duration.toFixed(2)}s | Previsão: ${estimatedFrames} PNGs (com FPS atual)`;
     }
 });
 
