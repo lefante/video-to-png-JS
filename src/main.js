@@ -4,6 +4,45 @@ const { createFFmpeg, fetchFile } = require('@ffmpeg/ffmpeg');
 const fs = require('fs');
 const { execSync } = require('child_process');
 
+// Settings file path
+const settingsFilePath = path.join(app.getPath('userData'), 'settings.json');
+
+// Default settings
+const defaultSettings = {
+    width: 1920,
+    height: 1080,
+    fps: 30,
+    name: 'frame',
+    option: 'Resize with Fixed Aspect Ratio',
+    removeBg: false,
+    model: 'u2net',
+    processor: 'gpu',
+    selectedFilePath: null,
+    selectedOutputDir: null
+};
+
+// Load settings from file
+function loadSettings() {
+    try {
+        if (fs.existsSync(settingsFilePath)) {
+            const data = fs.readFileSync(settingsFilePath, 'utf8');
+            return { ...defaultSettings, ...JSON.parse(data) };
+        }
+    } catch (error) {
+        console.error('Error loading settings:', error);
+    }
+    return defaultSettings;
+}
+
+// Save settings to file
+function saveSettings(settings) {
+    try {
+        fs.writeFileSync(settingsFilePath, JSON.stringify(settings, null, 2));
+    } catch (error) {
+        console.error('Error saving settings:', error);
+    }
+}
+
 let mainWindow;
 
 function createWindow() {
@@ -24,6 +63,12 @@ function createWindow() {
     });
 
     mainWindow.loadFile(path.join(__dirname, 'index.html'));
+
+    mainWindow.webContents.on('did-finish-load', () => {
+        const settings = loadSettings();
+        mainWindow.webContents.send('load-settings', settings);
+    });
+
     mainWindow.on('closed', () => mainWindow = null);
 }
 
@@ -147,6 +192,10 @@ ipcMain.handle('convert-video', async (event, { filePath, outputDir, width, heig
     } catch (error) {
         return { success: false, message: `Error: ${error.message}` };
     }
+});
+
+ipcMain.on('save-settings', (event, settings) => {
+    saveSettings(settings);
 });
 
 ipcMain.on('window-minimize', () => {

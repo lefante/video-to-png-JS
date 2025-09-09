@@ -1,6 +1,47 @@
 let selectedFilePath = null;
 let selectedOutputDir = null;
 
+// Function to collect current settings
+function collectSettings() {
+    return {
+        width: document.getElementById('width').value,
+        height: document.getElementById('height').value,
+        fps: document.getElementById('fps').value,
+        name: document.getElementById('name').value,
+        option: document.getElementById('resize-option').value,
+        removeBg: document.getElementById('remove-bg').checked,
+        model: document.getElementById('model-select').value,
+        processor: document.getElementById('processor-select').value,
+        selectedFilePath: selectedFilePath,
+        selectedOutputDir: selectedOutputDir
+    };
+}
+
+// Function to apply settings to UI
+function applySettings(settings) {
+    document.getElementById('width').value = settings.width;
+    document.getElementById('height').value = settings.height;
+    document.getElementById('fps').value = settings.fps;
+    document.getElementById('name').value = settings.name;
+    document.getElementById('resize-option').value = settings.option;
+    document.getElementById('remove-bg').checked = settings.removeBg;
+    document.getElementById('model-select').value = settings.model;
+    document.getElementById('processor-select').value = settings.processor;
+    selectedFilePath = settings.selectedFilePath;
+    selectedOutputDir = settings.selectedOutputDir;
+
+    // Update status if paths are set
+    if (selectedFilePath) {
+        document.getElementById('status').textContent = `Selected file: ${selectedFilePath.split(/[\\/]/).pop()}`;
+    }
+    if (selectedOutputDir) {
+        document.getElementById('status').textContent += ` | Output folder: ${selectedOutputDir}`;
+    }
+
+    // Trigger background removal checkbox change to show/hide options
+    document.getElementById('remove-bg').dispatchEvent(new Event('change'));
+}
+
 function validateNumberInput(event) {
     const key = event.key;
     if (!/[0-9]|Backspace|Delete|ArrowLeft|ArrowRight|Tab/.test(key)) {
@@ -131,7 +172,11 @@ window.electronAPI.onFrameSaved?.((event, fileName) => {
 });
 
 document.getElementById('min-btn').onclick = () => window.electronAPI.minimize();
-document.getElementById('close-btn').onclick = () => window.electronAPI.close();
+document.getElementById('close-btn').onclick = () => {
+    const settings = collectSettings();
+    window.electronAPI.saveSettings(settings);
+    window.electronAPI.close();
+};
 document.getElementById('fullscreen-btn').onclick = () => window.electronAPI.toggleFullscreen();
 const fullscreenBtn = document.getElementById('fullscreen-btn');
 window.addEventListener('resize', () => {
@@ -150,3 +195,8 @@ function showSpinner() {
 function hideSpinner() {
     document.getElementById('status').innerHTML = '';
 }
+
+// Listen for settings load
+window.electronAPI.onLoadSettings((event, settings) => {
+    applySettings(settings);
+});
