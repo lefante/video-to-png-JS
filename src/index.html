@@ -2,56 +2,167 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=380, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline';">
     <title>Video to PNG Converter</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- Custom Titlebar -->
     <div id="custom-titlebar">
-        <span>🎬 Video to PNG Converter</span>
+        <div class="logo-container">
+            <div class="logo">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <rect x="10" y="25" width="15" height="50" fill="url(#grad1)" transform="rotate(-15 17.5 50)" />
+                    <rect x="35" y="15" width="15" height="70" fill="url(#grad1)" />
+                    <rect x="60" y="25" width="15" height="50" fill="url(#grad1)" transform="rotate(15 67.5 50)" />
+                    <circle cx="50" cy="50" r="45" fill="none" stroke="url(#grad1)" stroke-width="2" opacity="0.5" />
+                </svg>
+            </div>
+            <div class="logo-text">Video to PNG</div>
+        </div>
         <div id="window-controls">
             <button id="min-btn" title="Minimize">—</button>
             <button id="fullscreen-btn" title="Fullscreen">⛶</button>
             <button id="close-btn" title="Close">×</button>
         </div>
     </div>
+
+    <!-- Main Application -->
     <div id="app">
-        <div id="preview"></div>
-        <div id="frames-preview"></div>
-        <label for="width">Width:</label>
-        <input type="text" id="width" placeholder="Ex: 1920">
-        <label for="height">Height:</label>
-        <input type="text" id="height" placeholder="Ex: 1080">
-        <label for="name">File Name:</label>
-        <input type="text" id="name" placeholder="Ex: frame">
-        <label for="fps">Desired FPS:</label>
-        <input type="text" id="fps" placeholder="Ex: 30">
-        <button id="select-file">Select Video</button>
-        <button id="select-directory">Select Output Folder</button>
-        <select id="resize-option">
-            <option value="Force Resize">Force Resize</option>
-            <option value="Maintain Aspect Ratio with Borders">Maintain Aspect Ratio with Borders</option>
-            <option value="Resize with Fixed Aspect Ratio">Resize with Fixed Aspect Ratio</option>
-        </select>
-        <label><input type="checkbox" id="remove-bg"> Remove Background (AI)</label>
-        <div id="bg-options" style="display: none; margin-top: 10px;">
-            <label for="model-select">AI Model:</label>
-            <select id="model-select">
-                <option value="u2net">U2Net (General)</option>
-                <option value="u2netp">U2NetP (Portrait)</option>
-                <option value="silueta">Silueta (General)</option>
-            </select>
-            <label for="processor-select" style="margin-left: 10px;">Processor:</label>
-            <select id="processor-select">
-                <option value="gpu">GPU (DirectML)</option>
-                <option value="cpu">CPU</option>
-            </select>
-        </div>
-        <button id="convert">Convert</button>
-        <progress id="progress-bar" value="0" max="100"></progress>
-        <div id="status"></div>
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1>Transform Videos into PNG Sequences</h1>
+                <p>Convert your videos to high-quality PNG frames with advanced background removal and customizable settings</p>
+            </div>
+        </section>
+
+        <!-- Preview Section -->
+        <section class="preview-section">
+            <div class="preview-container">
+                <div class="preview-card">
+                    <h3>Video Preview</h3>
+                    <div id="preview"></div>
+                </div>
+                <div class="preview-card">
+                    <h3>Generated Frames</h3>
+                    <div id="frames-preview"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Settings Section -->
+        <section class="settings-section">
+            <div class="settings-container">
+                <h2>Conversion Settings</h2>
+
+                <div class="settings-grid">
+                    <div class="setting-group">
+                        <label for="width">Width (px)</label>
+                        <input type="text" id="width" placeholder="1920">
+                    </div>
+
+                    <div class="setting-group">
+                        <label for="height">Height (px)</label>
+                        <input type="text" id="height" placeholder="1080">
+                    </div>
+
+                    <div class="setting-group">
+                        <label for="name">File Name</label>
+                        <input type="text" id="name" placeholder="frame">
+                    </div>
+
+                    <div class="setting-group">
+                        <label for="fps">Desired FPS</label>
+                        <input type="text" id="fps" placeholder="30">
+                    </div>
+                </div>
+
+                <div class="setting-group full-width">
+                    <label for="resize-option">Resize Option</label>
+                    <select id="resize-option">
+                        <option value="Force Resize">Force Resize</option>
+                        <option value="Maintain Aspect Ratio with Borders">Maintain Aspect Ratio with Borders</option>
+                        <option value="Resize with Fixed Aspect Ratio">Resize with Fixed Aspect Ratio</option>
+                    </select>
+                </div>
+
+                <div class="setting-group full-width">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="remove-bg">
+                        <span class="checkmark"></span>
+                        Remove Background (AI)
+                    </label>
+                </div>
+
+                <div id="bg-options" class="bg-options-container">
+                    <div class="settings-grid">
+                        <div class="setting-group">
+                            <label for="model-select">AI Model</label>
+                            <select id="model-select">
+                                <option value="u2net">U2Net (General)</option>
+                                <option value="u2netp">U2NetP (Portrait)</option>
+                                <option value="silueta">Silueta (General)</option>
+                            </select>
+                        </div>
+
+                        <div class="setting-group">
+                            <label for="processor-select">Processor</label>
+                            <select id="processor-select">
+                                <option value="gpu">GPU (DirectML)</option>
+                                <option value="cpu">CPU</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Actions Section -->
+        <section class="actions-section">
+            <div class="actions-container">
+                <button id="select-file" class="action-btn primary">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+                    </svg>
+                    Select Video File
+                </button>
+
+                <button id="select-directory" class="action-btn secondary">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M10,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V8C22,6.89 21.1,8 20,8H12L10,4Z"/>
+                    </svg>
+                    Select Output Folder
+                </button>
+
+                <button id="convert" class="action-btn convert">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M8,5.14V19.14L19,12.14L8,5.14Z"/>
+                    </svg>
+                    Start Conversion
+                </button>
+            </div>
+        </section>
+
+        <!-- Progress Section -->
+        <section class="progress-section">
+            <div class="progress-container">
+                <div class="progress-info">
+                    <h3>Conversion Progress</h3>
+                    <div id="status"></div>
+                </div>
+                <progress id="progress-bar" value="0" max="100"></progress>
+            </div>
+        </section>
     </div>
+
     <script src="renderer.js"></script>
 </body>
 </html>
