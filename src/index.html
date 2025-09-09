@@ -34,6 +34,20 @@
             <option value="Maintain Aspect Ratio with Borders">Maintain Aspect Ratio with Borders</option>
             <option value="Resize with Fixed Aspect Ratio">Resize with Fixed Aspect Ratio</option>
         </select>
+        <label><input type="checkbox" id="remove-bg"> Remove Background (AI)</label>
+        <div id="bg-options" style="display: none; margin-top: 10px;">
+            <label for="model-select">AI Model:</label>
+            <select id="model-select">
+                <option value="u2net">U2Net (General)</option>
+                <option value="u2netp">U2NetP (Portrait)</option>
+                <option value="silueta">Silueta (General)</option>
+            </select>
+            <label for="processor-select" style="margin-left: 10px;">Processor:</label>
+            <select id="processor-select">
+                <option value="gpu">GPU (DirectML)</option>
+                <option value="cpu">CPU</option>
+            </select>
+        </div>
         <button id="convert">Convert</button>
         <progress id="progress-bar" value="0" max="100"></progress>
         <div id="status"></div>

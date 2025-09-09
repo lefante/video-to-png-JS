@@ -2,6 +2,7 @@ const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
 const { createFFmpeg, fetchFile } = require('@ffmpeg/ffmpeg');
 const fs = require('fs');
+const { execSync } = require('child_process');
 
 let mainWindow;
 
@@ -55,7 +56,7 @@ ipcMain.handle('select-directory', async () => {
     return result.filePaths[0];
 });
 
-ipcMain.handle('convert-video', async (event, { filePath, outputDir, width, height, name, fps, option }) => {
+ipcMain.handle('convert-video', async (event, { filePath, outputDir, width, height, name, fps, option, removeBg, model, processor }) => {
     try {
         const ffmpeg = createFFmpeg({ log: true });
         await ffmpeg.load();
@@ -118,7 +119,16 @@ ipcMain.handle('convert-video', async (event, { filePath, outputDir, width, heig
                     for (let i = lastCount; i < newFiles.length; i++) {
                         const file = newFiles[i];
                         const data = ffmpeg.FS('readFile', `${outputPath}/${file}`);
-                        fs.writeFileSync(path.join(outputDir, file), data);
+                        const filePath = path.join(outputDir, file);
+                        fs.writeFileSync(filePath, data);
+                        if (removeBg) {
+                            try {
+                                const result = execSync(`python "${path.join(__dirname, '..', 'remove_bg.py')}" "${filePath}" "${filePath}" "${model || 'u2net'}" "${processor || 'gpu'}"`, { encoding: 'utf8' });
+                                console.log('Background removal output:', result);
+                            } catch (e) {
+                                console.error('Error removing background:', e);
+                            }
+                        }
                         mainWindow.webContents.send('frame-saved', file);
                     }
                     lastCount = newFiles.length;

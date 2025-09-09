@@ -12,6 +12,12 @@ document.getElementById('width').addEventListener('keydown', validateNumberInput
 document.getElementById('height').addEventListener('keydown', validateNumberInput);
 document.getElementById('fps').addEventListener('keydown', validateNumberInput);
 
+// Handle background removal checkbox
+document.getElementById('remove-bg').addEventListener('change', (event) => {
+    const bgOptions = document.getElementById('bg-options');
+    bgOptions.style.display = event.target.checked ? 'block' : 'none';
+});
+
 document.getElementById('select-file').addEventListener('click', async () => {
     try {
         selectedFilePath = await window.electronAPI.selectFile();
@@ -69,6 +75,9 @@ document.getElementById('convert').addEventListener('click', async () => {
     const name = document.getElementById('name').value;
     const fps = document.getElementById('fps').value;
     const option = document.getElementById('resize-option').value;
+    const removeBg = document.getElementById('remove-bg').checked;
+    const model = document.getElementById('model-select').value;
+    const processor = document.getElementById('processor-select').value;
 
     if (!selectedFilePath || !selectedOutputDir || !width || !height || !name || !fps) {
         document.getElementById('status').textContent = 'Please fill in all fields and select a video and output directory.';
@@ -86,6 +95,9 @@ document.getElementById('convert').addEventListener('click', async () => {
             name,
             fps: parseInt(fps),
             option,
+            removeBg,
+            model,
+            processor,
         });
 
         hideSpinner();
